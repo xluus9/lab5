@@ -34,26 +34,59 @@ function sortObjArray(objArray, propName) {
     });
 } //sortObjArray()
 
+//Document ready function which renders the address
+//It also sorts and rerenders the addresses when
+//a sort button is clicked.
 $(function(){
     render(Employees.entries);
+
+    //sorts the array of Employees by Last, Title, and 
+    //dept
+    $('.sort-ui .btn').click(function(){
+        var sortBtn = $(this);
+
+        sortObjArray(Employees.entries, sortBtn.attr('data-sortby'));
+
+        render(Employees.entries);
+
+        sortBtn.siblings().removeClass('active');
+
+        sortBtn.addClass('active');
+    });
+
+    $('.sort-ui .btn').popover({
+        content: function() {
+            return 'Click to Resort by ' + $(this).html();
+        },
+        container: 'body',
+        trigger: 'hover',
+        placement: 'bottom'
+    });
 });
 
+//render function that copies the template
+//and places it into the address book
 function render(entries) {
-    var $template = $(".template");
-    var $address = $(".address-book");
+    var $template = $('.template');
+    var $address = $('.address-book');
 
+    $address.hide();
     $address.empty();
 
+    //goes through the array Employees and places
+    //it into the right element
     $.each(Employees.entries, function(){
-        console.log(this.pic);
         var $clone = $template.clone();
-        $clone.find(".pic").attr({
+        $clone.find('.pic').attr({
             src: this.pic,
-            alt: "picture of " + this.first});
+            alt: 'picture of ' + this.first});
+        $clone.find('.first').html(this.first);
+        $clone.find('.last').html(this.last);
+        $clone.find('.title').html(this.title);
+        $clone.find('.dept').html(this.dept);
 
-
-        $address.removeClass(".template");
-
+        $clone.removeClass('template');
         $address.append($clone);
+        $address.fadeIn(400);
     });
 }
