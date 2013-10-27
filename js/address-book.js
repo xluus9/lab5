@@ -54,6 +54,7 @@ $(function(){
         sortBtn.addClass('active');
     });
 
+    //creates a popup when button is hovered over
     $('.sort-ui .btn').popover({
         content: function() {
             return 'Click to Resort by ' + $(this).html();
